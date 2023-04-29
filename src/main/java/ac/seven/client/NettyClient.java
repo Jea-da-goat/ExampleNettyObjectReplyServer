@@ -1,61 +1,52 @@
-package com.itndev.factions.SocketConnection.Client;
+package ac.seven.client;
 
 
-import com.itndev.factions.Jedis.JedisTempStorage;
-import com.itndev.factions.Main;
-import com.itndev.factions.RedisStreams.StaticVal;
+import ac.seven.utils.utils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
-import static java.lang.Thread.*;
 
 public class NettyClient {
-    public static String HOST;// = System.getProperty("host", "127.0.0.1");
-    public static int PORT;// = Integer.parseInt(System.getProperty("port", "8992"));
+    public String HOST;// = System.getProperty("host", "127.0.0.1");
+    public  int PORT;// = Integer.parseInt(System.getProperty("port", "8992"));
 
-    private static Channel channel;
+    private Channel channel;
+    private final String Name;
 
-    public static Channel getConnection() {
+    public Channel getConnection() {
         return channel;
     }
 
-    public static void send(HashMap<Integer, Object> stream) {
+    public void send(HashMap<Integer, Object> stream) {
         channel.writeAndFlush(stream);
     }
 
-    public NettyClient(String host, int port) {
-        HOST = host;
-        PORT = port;
+    public NettyClient(String Name, String host, int port) {
+        this.HOST = host;
+        this.PORT = port;
+        this.Name = Name;
     }
 
-    public void run() throws Exception {
+    public void run(utils.netty.reader reader) throws Exception {
 
-        final SslContext sslCtx = SslContextBuilder.forClient()
-                .trustManager(InsecureTrustManagerFactory.INSTANCE).build();
+        //final SslContext sslCtx = SslContextBuilder.forClient()
+               // .trustManager(InsecureTrustManagerFactory.INSTANCE).build();
 
         EventLoopGroup group = new NioEventLoopGroup();
         try {
-            initTask();
             while(true) {
                 Bootstrap b = new Bootstrap();
                 b.group(group)
                         .channel(NioSocketChannel.class)
-                        .handler(new StreamInitializer(sslCtx));
+                        .handler(new StreamInitializer(reader, this.HOST, this.PORT, this.Name));
 
 
                 // Start the connection attempt.
-                channel = b.connect(HOST, PORT).sync().channel();
+                channel = b.connect(this.HOST, this.PORT).sync().channel();
 
 
                 // Read commands from the stdin
@@ -90,92 +81,4 @@ public class NettyClient {
         }
     }
 
-    public void initTask() {
-        new Thread(() -> {
-            while (true) {
-                try {
-                    synchronized (JedisTempStorage.MESSAGING_CHANNEL) {
-                        if(!JedisTempStorage.MESSAGING_CHANNEL.isEmpty()) {
-                            HashMap<Integer, Object> stream = new HashMap<>();
-                            stream.put(StaticVal.getServerNameArgs(), Main.ServerName);
-                            stream.put(StaticVal.getDataTypeArgs(), "MESSAGING_CHANNEL");
-                            List<String> temp = new ArrayList<>(JedisTempStorage.MESSAGING_CHANNEL);
-                            stream.put(1, temp);
-                            JedisTempStorage.MESSAGING_CHANNEL.clear();
-                            NettyClient.channel.writeAndFlush(stream);
-                        }
-                    }
-                    sleep(2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-        new Thread(() -> {
-            while (true) {
-                try {
-                    synchronized (JedisTempStorage.Temp_INPUT_MAP) {
-                        if(!JedisTempStorage.Temp_INPUT_MAP.isEmpty()) {
-                            HashMap<Integer, Object> stream = new HashMap<>();
-                            stream.put(StaticVal.getServerNameArgs(), Main.ServerName);
-                            stream.put(StaticVal.getDataTypeArgs(), "FrontEnd-Output");
-                            List<String> temp = new ArrayList<>(JedisTempStorage.Temp_INPUT_MAP);
-                            stream.put(1, temp);
-                            //DataStream stream = new DataStream(Main.ServerName, "FrontEnd-Output", JedisTempStorage.Temp_INPUT_MAP);
-                            JedisTempStorage.Temp_INPUT_MAP.clear();
-                            NettyClient.channel.writeAndFlush(stream);
-                            //System.out.println(ResponceList.class.getCanonicalName());
-                        }
-                    }
-                    sleep(2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-        new Thread(() -> {
-            while (true) {
-                try {
-                    synchronized (JedisTempStorage.Temp_INTERCONNECT_MAP) {
-                        if(!JedisTempStorage.Temp_INTERCONNECT_MAP.isEmpty()) {
-                            //DataStream stream = new DataStream(Main.ServerName, "FrontEnd-Interconnect", JedisTempStorage.Temp_INTERCONNECT_MAP);
-                            HashMap<Integer, Object> stream = new HashMap<>();
-                            stream.put(StaticVal.getServerNameArgs(), Main.ServerName);
-                            stream.put(StaticVal.getDataTypeArgs(), "FrontEnd-Interconnect");
-                            List<String> temp = new ArrayList<>(JedisTempStorage.Temp_INTERCONNECT_MAP);
-                            stream.put(1, temp);
-                            //DataStream stream = new DataStream(Main.ServerName, "FrontEnd-Output", JedisTempStorage.Temp_INPUT_MAP);
-                            JedisTempStorage.Temp_INTERCONNECT_MAP.clear();
-                            NettyClient.channel.writeAndFlush(stream);
-                            //System.out.println(ResponceList.class.getCanonicalName());
-                        }
-                    }
-                    sleep(2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-        new Thread(() -> {
-            while (true) {
-                try {
-                    synchronized (JedisTempStorage.Temp_INTERCONNECT2_MAP) {
-                        if(!JedisTempStorage.Temp_INTERCONNECT2_MAP.isEmpty()) {
-                            HashMap<Integer, Object> stream = new HashMap<>();
-                            stream.put(StaticVal.getServerNameArgs(), Main.ServerName);
-                            stream.put(StaticVal.getDataTypeArgs(), "FrontEnd-Chat");
-                            List<String> temp = new ArrayList<>(JedisTempStorage.Temp_INTERCONNECT2_MAP);
-                            stream.put(1, temp);
-                            JedisTempStorage.Temp_INTERCONNECT2_MAP.clear();
-                            NettyClient.channel.writeAndFlush(stream);
-                            //System.out.println(ResponceList.class.getCanonicalName());
-                        }
-                    }
-                    sleep(2);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
 }

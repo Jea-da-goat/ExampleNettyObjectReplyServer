@@ -1,24 +1,22 @@
-package com.itndev.FactionCore.SocketConnection.Server;
+package ac.seven.server;
 
+import ac.seven.utils.utils;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
-import io.netty.handler.ssl.SslContext;
-import io.netty.util.concurrent.GlobalEventExecutor;
 
 
 public class StreamInitializer extends ChannelInitializer<SocketChannel> {
 
 
-    private final SslContext sslCtx;
+    //private final SslContext sslCtx;
+    private final utils.netty.reader reader;
 
-    public StreamInitializer(SslContext sslCtx) {
-        this.sslCtx = sslCtx;
+    public StreamInitializer(utils.netty.reader reader) {
+        this.reader = reader;
     }
 
     @Override
@@ -29,12 +27,12 @@ public class StreamInitializer extends ChannelInitializer<SocketChannel> {
         // and accept any invalid certificates in the client side.
         // You will need something more complicated to identify both
         // and server in the real world.
-        pipeline.addLast(sslCtx.newHandler(ch.alloc()));
+        //pipeline.addLast(sslCtx.newHandler(ch.alloc()));
 
         // On top of the SSL handler, add the text line codec.
         pipeline.addLast(new ObjectEncoder());
         pipeline.addLast(new ObjectDecoder(ClassResolvers.cacheDisabled(null)));
-        pipeline.addLast(new PacketHandler());
+        pipeline.addLast(new PacketHandler(reader));
     }
     /*private final AtomicLong Messages = new AtomicLong();
 
