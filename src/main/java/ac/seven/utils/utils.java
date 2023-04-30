@@ -24,11 +24,14 @@ public class utils {
     public class netty {
         public interface reader {
 
-            String name = null;
-
             public void read(ChannelHandlerContext ctx, Object o);
 
             public String getName();
+
+            public void setName(String name);
+
+            public reader newInstance(String name);
         }
+
     }
 }

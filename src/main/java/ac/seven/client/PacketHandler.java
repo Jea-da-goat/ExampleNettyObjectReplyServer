@@ -12,7 +12,7 @@ public class PacketHandler extends SimpleChannelInboundHandler<Object> {
     private static final ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     private final String Name;
-    private final utils.netty.reader reader;
+    private utils.netty.reader reader;
     public PacketHandler(String name, utils.netty.reader reader) {
         this.Name = name;
         this.reader = reader;
@@ -35,8 +35,17 @@ public class PacketHandler extends SimpleChannelInboundHandler<Object> {
         ctx.close().sync();
     }
 
+    private boolean loaded = false;
+
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
+        if(!loaded) {
+            String tempname = (String) o;
+            loaded = true;
+            this.reader = this.reader.newInstance(tempname);
+            System.out.println(tempname);
+            return;
+        }
         this.reader.read(channelHandlerContext, o);
     }
 }

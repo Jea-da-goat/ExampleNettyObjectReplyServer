@@ -29,7 +29,7 @@ public class PacketHandler extends SimpleChannelInboundHandler<Object> {
 
     private static ArrayList<String> Whitelist = new ArrayList<>();
 
-    private final utils.netty.reader reader;
+    private utils.netty.reader reader;
 
     private static Boolean isWhitelisted(SocketAddress ip) {
         String onlyIP = toIP(ip.toString());
@@ -55,11 +55,20 @@ public class PacketHandler extends SimpleChannelInboundHandler<Object> {
 
     }
 
+    private boolean loaded = false;
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object o) throws Exception {
-        String name = (String) o;
-        id.put(name, ctx.channel().id());
-        id2.put(ctx.channel().id(), name);
+        if(!loaded) {
+            String name = (String) o;
+            id.put(name, ctx.channel().id());
+            id2.put(ctx.channel().id(), name);
+            loaded = true;
+            this.reader = reader.newInstance(name);
+            return;
+        }
+        this.reader.read(ctx, o);
+
 
 
     }

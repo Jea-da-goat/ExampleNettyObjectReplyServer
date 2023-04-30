@@ -23,7 +23,7 @@ public class NettyServer {
         this.port = port;
     }
 
-    public void run() throws InterruptedException, CertificateException, SSLException {
+    public void run(utils.netty.reader reader) throws InterruptedException, CertificateException, SSLException {
         //SelfSignedCertificate ssc = new SelfSignedCertificate();
         //SslContext sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey())
          //       .build();
@@ -32,19 +32,6 @@ public class NettyServer {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();
-            utils.netty.reader reader = new utils.netty.reader() {
-                @Override
-                public void read(ChannelHandlerContext ctx, Object o) {
-                    System.out.println("====");
-                    System.out.println(o);
-                    System.out.println(getName());
-                }
-
-                @Override
-                public String getName() {
-                    return "config.Name";
-                }
-            };
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))

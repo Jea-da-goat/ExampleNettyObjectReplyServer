@@ -4,17 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="38cb8f61-bbda-4243-9234-ae1a1af77301" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ac/seven/utils/utils.java" afterDir="false" />
+    <list default="true" id="38cb8f61-bbda-4243-9234-ae1a1af77301" name="Changes" comment="even more updates  + custom reader added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ac/seven/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ac/seven/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ac/seven/client/NettyClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ac/seven/client/NettyClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ac/seven/client/PacketHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ac/seven/client/PacketHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ac/seven/client/StreamInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ac/seven/client/StreamInitializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ac/seven/server/NettyServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ac/seven/server/NettyServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ac/seven/server/PacketHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ac/seven/server/PacketHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ac/seven/server/StreamInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ac/seven/server/StreamInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ac/seven/utils/utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ac/seven/utils/utils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +48,10 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/Server/IdeaProjects/NettyObjectReplyServer/src/main/java/ac/seven"
+    "last_opened_file_path": "C:/Users/Server/IdeaProjects/NettyObjectReplyServer/src/main/java/ac/seven",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -91,6 +90,18 @@
       <option name="presentableId" value="Default" />
       <updated>1682732506361</updated>
     </task>
+    <task id="LOCAL-00001" summary="even more updates  + custom reader added">
+      <created>1682779174311</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1682779174311</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="even more updates  + custom reader added" />
+    <option name="LAST_COMMIT_MESSAGE" value="even more updates  + custom reader added" />
   </component>
 </project>
